@@ -143,21 +143,21 @@ class AHP:
         for i, alt in enumerate(self.alternatives):
             print(f"{alt}: {self.final_ranking[i]:.4f}")
 
-
-def parse_input(prompt):
-    """
-    Memproses input pengguna. Mendukung input angka biasa atau pecahan (contoh: 1/3).
-    Args:
-        prompt (str): Teks untuk meminta input pengguna.
-    Returns:
-        float: Nilai yang diinput pengguna dalam bentuk desimal.
-    """
-    user_input = input(prompt)
-    try:
-        if '/' in user_input:
-            numerator, denominator = map(float, user_input.split('/'))
-            return numerator / denominator
-        else:
-            return float(user_input)
-    except Exception:
-        raise ValueError("Input tidak valid. Harap masukkan angka atau pecahan seperti 1/3.")
+ 
+    def parse_input(prompt):
+        """
+        Memproses input pengguna. Mendukung input angka biasa atau pecahan (contoh: 1/3).
+        Args:
+            prompt (str): Teks untuk meminta input pengguna.
+        Returns:
+            float: Nilai yang diinput pengguna dalam bentuk desimal.
+        """
+        user_input = input(prompt)
+        try:
+            if '/' in user_input:
+                numerator, denominator = map(float, user_input.split('/'))
+                return numerator / denominator
+            else:
+                return float(user_input)
+        except Exception:
+            raise ValueError("Input tidak valid. Harap masukkan angka atau pecahan seperti 1/3.")
