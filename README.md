@@ -47,7 +47,7 @@ Proyek ini cocok untuk berbagai jenis pengambilan keputusan, seperti:
    ```bash
    pip install -r requirements.txt
 
-3. **alankan Program Eksekusi file main.py untuk memulai aplikasi:**
+3. **Jalankan Program Eksekusi file main.py untuk memulai aplikasi:**
    ```bash
    python main.py
 
