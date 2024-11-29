@@ -143,8 +143,8 @@ class AHP:
         for i, alt in enumerate(self.alternatives):
             print(f"{alt}: {self.final_ranking[i]:.4f}")
 
- 
-    def parse_input(prompt):
+
+def parse_input(prompt):
         """
         Memproses input pengguna. Mendukung input angka biasa atau pecahan (contoh: 1/3).
         Args:
