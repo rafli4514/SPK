@@ -1,0 +1,13 @@
+{
+    "kriteria": [],
+    "alternatif": [],
+    "criteria_matrix": null,
+    "alternative_matrices": {},
+    "criteria_benefit": [],
+    "criteria_cost": [],
+    "weight_benefit": [],
+    "weight_cost": [],
+    "matrix_benefit": null,
+    "matrix_cost": null,
+    "metode": "AHP"
+}
