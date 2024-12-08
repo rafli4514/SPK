@@ -4,6 +4,11 @@ import tkinter as tk
 from tkinter import ttk, messagebox
 from ttkbootstrap import Style
 from .ahp_ui import AHPFrame
+from .saw_ui import SAWFrame
+# from .topsis_ui import TOPSISFrame  # Metode lain yang belum diimplementasikan
+# from .wp_ui import WPFrame
+# from .promethee_ui import PrometheeFrame
+# from .maut_ui import MAUTFrame
 import sys
 
 class DecisionMakingApp:
@@ -31,12 +36,16 @@ class DecisionMakingApp:
         title.pack(pady=20)
 
         # Daftar Metode
-        methods = ["Analytic Hierarchy Process (AHP)", "TOPSIS", "SAW", "WP", "Promethee", "MAUT"]  # Tambahkan metode lain di sini
+        methods = ["Analytic Hierarchy Process (AHP)", "Simple Additive Weighting (SAW)", "TOPSIS", "WP", "Promethee", "MAUT"]  # Tambahkan metode lain di sini
 
         for method in methods:
             btn = ttk.Button(self.main_frame, text=method, width=30,
                              command=lambda m=method: self.select_method(m))
             btn.pack(pady=10)
+
+        # Tombol Import Excel (Fitur akan ditambahkan nanti)
+        # import_btn = ttk.Button(self.main_frame, text="Import dari Excel", command=self.import_data)
+        # import_btn.pack(pady=20)
 
     def select_method(self, method_name):
         """
@@ -47,20 +56,19 @@ class DecisionMakingApp:
 
         # Tombol Kembali
         back_btn = ttk.Button(self.main_frame, text="Kembali", command=self.create_home_page)
-        back_btn.pack(anchor='w')
+        back_btn.pack(anchor='w', pady=5)
 
         # Display Frame Metode yang Dipilih
         if method_name == "Analytic Hierarchy Process (AHP)":
             ahp_frame = AHPFrame(self.main_frame)
             ahp_frame.pack(fill=tk.BOTH, expand=True)
+        elif method_name == "Simple Additive Weighting (SAW)":
+            saw_frame = SAWFrame(self.main_frame)
+            saw_frame.pack(fill=tk.BOTH, expand=True)
         elif method_name == "TOPSIS":
             # topsis_frame = TOPSISFrame(self.main_frame)
             # topsis_frame.pack(fill=tk.BOTH, expand=True)
             messagebox.showinfo("Info", "Metode TOPSIS belum diimplementasikan.")
-        elif method_name == "SAW":
-            # saw_frame = SAWFrame(self.main_frame)
-            # saw_frame.pack(fill=tk.BOTH, expand=True)
-            messagebox.showinfo("Info", "Metode SAW belum diimplementasikan.")
         elif method_name == "WP":
             # wp_frame = WPFrame(self.main_frame)
             # wp_frame.pack(fill=tk.BOTH, expand=True)
