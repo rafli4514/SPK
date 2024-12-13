@@ -23,7 +23,6 @@ class AHPPage(tk.Frame):
 
         back_label = tk.Label(header_frame, text="←", font=("Poppins", 16), fg=FG_MAIN, bg=BG_MAIN)
         back_label.pack(side="left", padx=(20,0))
-        # Kembali ke MainPage
         back_label.bind("<Button-1>", lambda e: controller.show_frame("MainPage"))
 
         ahp_title_label = tk.Label(header_frame, text="Input  Kriteria Dan Alternatif (AHP)", font=TITLE_FONT, fg=FG_MAIN, bg=BG_MAIN)
@@ -65,5 +64,7 @@ class AHPPage(tk.Frame):
         alternatif_list_text = tk.Text(card_frame, font=INPUT_FONT, fg="black", bg="white", bd=1, relief="solid", height=5)
         alternatif_list_text.pack(fill="x", padx=20, pady=(10,20))
 
-        lanjut_button = tk.Button(card_frame, text="Lanjut", font=BUTTON_FONT, bg=BG_ACTION, fg=FG_MAIN, bd=0, relief="flat")
+        # Tombol Lanjut
+        lanjut_button = tk.Button(card_frame, text="Lanjut", font=BUTTON_FONT, bg=BG_ACTION, fg=FG_MAIN, bd=0, relief="flat",
+                                  command=lambda: controller.show_frame("CriteriaAHPPage"))
         lanjut_button.pack(pady=(10,20), ipadx=50, ipady=5)

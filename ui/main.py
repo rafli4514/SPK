@@ -1,6 +1,9 @@
 import tkinter as tk
 from main_page import MainPage
 from ahp_page import AHPPage
+from criteria_ahp_page import CriteriaAHPPage
+from alternative_ahp_page import AlternativeAHPPage
+from result_ahp_page import ResultPage  
 
 BG_MAIN = "#261A64"
 
@@ -16,7 +19,7 @@ class App(tk.Tk):
 
         self.frames = {}
 
-        for F in (MainPage, AHPPage):
+        for F in (MainPage, AHPPage, CriteriaAHPPage, AlternativeAHPPage, ResultPage):
             page_name = F.__name__
             frame = F(container, self)
             self.frames[page_name] = frame

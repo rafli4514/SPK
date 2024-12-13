@@ -1,6 +1,5 @@
 import tkinter as tk
 
-# Pastikan font Poppins terpasang di sistem Anda
 TITLE_FONT = ("Poppins", 16, "bold")
 METHOD_TITLE_FONT = ("Poppins", 16, "bold")
 METHOD_SUB_FONT = ("Poppins", 10, "normal")
@@ -28,7 +27,7 @@ class MainPage(tk.Frame):
         methods_container = tk.Frame(card_frame, bg=BG_CARD)
         methods_container.pack(pady=20, padx=20)
 
-        # Buat metode
+        # Metode AHP yang ketika diklik pindah ke AHPPage
         ahp_frame = self.create_method_frame(methods_container, "AHP", "Analytic Hierarchy Process", 
                                              command=lambda: controller.show_frame("AHPPage"))
         saw_frame = self.create_method_frame(methods_container, "SAW", "Simple Additive Weighting")
