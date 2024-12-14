@@ -1,0 +1,22 @@
+{
+  "name": "spk",
+  "version": "1.0.0",
+  "description": "Sistem Pendukung Keputusan (SPK) berbasis Multi-Kriteria ini mendukung berbagai metode seperti **AHP**, **SAW**, **WP**, **TOPSIS**, dan **GDSS**. Proyek ini dirancang untuk membantu proses pengambilan keputusan dalam berbagai skenario, seperti pemilihan produk, evaluasi proyek, atau penentuan prioritas alternatif.",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rafli4514/SPK.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/rafli4514/SPK/issues"
+  },
+  "homepage": "https://github.com/rafli4514/SPK#readme",
+  "devDependencies": {
+    "electron": "^33.2.1"
+  }
+}
