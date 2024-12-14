@@ -1,10 +1,7 @@
-window.addEventListener('DOMContentLoaded', () => {
-    const replaceText = (selector, text) => {
-      const element = document.getElementById(selector)
-      if (element) element.innerText = text
-    }
-  
-    for (const type of ['chrome', 'node', 'electron']) {
-      replaceText(`${type}-version`, process.versions[type])
-    }
-  })
+const { contextBridge, ipcRenderer } = require('electron');
+
+// Menyediakan API untuk komunikasi antara frontend dan backend
+contextBridge.exposeInMainWorld('api', {
+  sendMessage: (message) => ipcRenderer.send('message', message),
+  onMessage: (callback) => ipcRenderer.on('reply', (_, data) => callback(data)),
+});

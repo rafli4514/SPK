@@ -4,7 +4,8 @@
   "description": "Sistem Pendukung Keputusan (SPK) berbasis Multi-Kriteria ini mendukung berbagai metode seperti **AHP**, **SAW**, **WP**, **TOPSIS**, dan **GDSS**. Proyek ini dirancang untuk membantu proses pengambilan keputusan dalam berbagai skenario, seperti pemilihan produk, evaluasi proyek, atau penentuan prioritas alternatif.",
   "main": "main.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "electron ./main/main.js",
+    "build:css": "tailwindcss -i ./styles.css -o ./UI/build.css --watch"
   },
   "repository": {
     "type": "git",
@@ -17,6 +18,12 @@
   },
   "homepage": "https://github.com/rafli4514/SPK#readme",
   "devDependencies": {
-    "electron": "^33.2.1"
+    "autoprefixer": "^10.4.20",
+    "electron": "^33.2.1",
+    "postcss": "^8.4.49",
+    "tailwindcss": "^3.4.16"
+  },
+  "dependencies": {
+    "python-shell": "^5.0.0"
   }
 }
