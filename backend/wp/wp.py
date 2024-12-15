@@ -1,4 +1,5 @@
 import numpy as np
+# from ..base_method import BaseMethod
 
 class WP:
     def __init__(self):

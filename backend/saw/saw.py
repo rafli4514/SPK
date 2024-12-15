@@ -1,6 +1,7 @@
 # methods/saw.py
 
 import numpy as np
+# from ..base_method import BaseMethod
 
 class SAW:
     def __init__(self):

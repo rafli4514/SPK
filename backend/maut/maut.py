@@ -1,4 +1,5 @@
 import numpy as np
+from ..base_method import BaseMethod
 
 class MAUT:
     def __init__(self):
