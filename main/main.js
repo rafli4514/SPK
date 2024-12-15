@@ -1,31 +1,38 @@
-const { app, BrowserWindow } = require('electron'); 
-const path = require('path'); 
+// main.js
+const { app, BrowserWindow, ipcMain } = require('electron');
+const path = require('path');
+const axios = require('axios');
 
 let mainWindow;
 
 function createWindow() {
   mainWindow = new BrowserWindow({
-    width: 800, 
-    height: 600, 
+    width: 800,
+    height: 600,
     webPreferences: {
-      preload: path.join(__dirname, 'preload.js'), 
-      nodeIntegration: false, 
-      contextIsolation: true, 
-    },
+      nodeIntegration: true
+    }
   });
 
   mainWindow.loadFile(path.join(__dirname, '../src/pages/index.html'));
-
+  mainWindow.on('closed', () => {
+    mainWindow = null;
+  });
 }
 
-app.whenReady().then(() => {
-  createWindow();
-
-  app.on('activate', () => {
-    if (BrowserWindow.getAllWindows().length === 0) createWindow();
-  });
-});
+app.on('ready', createWindow);
 
 app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') app.quit();
+  if (process.platform !== 'darwin') {
+    app.quit();
+  }
+});
+
+ipcMain.on('run-ahp', async (event, data) => {
+  try {
+    const response = await axios.post('http://localhost:5000/api/ahp', data);
+    event.reply('ahp-result', response.data);  // Kirim hasil ke renderer
+  } catch (error) {
+    event.reply('ahp-result', { status: 'error', message: error.message });
+  }
 });

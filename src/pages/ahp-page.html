@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AHP: Input Kriteria & Alternatif</title>
     <link href="../build.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 
 <body class="flex items-center justify-center min-h-screen">
@@ -65,66 +66,60 @@
 
     <!-- Script -->
     <script>
-        const addKriteriaBtn = document.getElementById('add-kriteria');
-        const kriteriaInput = document.getElementById('kriteria');
-        const listKriteria = document.getElementById('list-kriteria');
+        $(document).ready(function () {
+            // Fungsi untuk menambahkan kriteria ke textarea
+            $('#add-kriteria').click(function () {
+                const kriteriaValue = $('#kriteria').val().trim();
+                if (kriteriaValue) {
+                    $('#list-kriteria').val(function (i, val) {
+                        return val + `• ${kriteriaValue}\n`;
+                    });
+                    $('#kriteria').val('');
+                }
+            });
 
-        const addAlternatifBtn = document.getElementById('add-alternatif');
-        const alternatifInput = document.getElementById('alternatif');
-        const listAlternatif = document.getElementById('list-alternatif');
+            // Fungsi untuk menambahkan alternatif ke textarea
+            $('#add-alternatif').click(function () {
+                const alternatifValue = $('#alternatif').val().trim();
+                if (alternatifValue) {
+                    $('#list-alternatif').val(function (i, val) {
+                        return val + `• ${alternatifValue}\n`;
+                    });
+                    $('#alternatif').val('');
+                }
+            });
 
-        // Fungsi untuk menambahkan kriteria ke textarea
-        function addKriteria() {
-            if (kriteriaInput.value.trim()) {
-                listKriteria.value += `• ${kriteriaInput.value}\n`;
-                kriteriaInput.value = '';
-            }
-        }
+            // Fungsi untuk menangani input Enter di input Kriteria
+            $('#kriteria').on('keyup', function (event) {
+                if (event.key === 'Enter') {
+                    $('#add-kriteria').click();
+                }
+            });
 
-        // Fungsi untuk menambahkan alternatif ke textarea
-        function addAlternatif() {
-            if (alternatifInput.value.trim()) {
-                listAlternatif.value += `• ${alternatifInput.value}\n`;
-                alternatifInput.value = '';
-            }
-        }
+            // Fungsi untuk menangani input Enter di input Alternatif
+            $('#alternatif').on('keyup', function (event) {
+                if (event.key === 'Enter') {
+                    $('#add-alternatif').click();
+                }
+            });
 
-        // Event listener untuk tombol Tambah Kriteria
-        addKriteriaBtn.addEventListener('click', addKriteria);
+            // Tombol lanjut dengan validasi jumlah kriteria dan alternatif
+            $('#lanjut').click(function () {
+                const kriteriaCount = $('#list-kriteria').val().trim().split('\n').filter(Boolean).length;
+                const alternatifCount = $('#list-alternatif').val().trim().split('\n').filter(Boolean).length;
 
-        // Event listener untuk tombol Tambah Alternatif
-        addAlternatifBtn.addEventListener('click', addAlternatif);
+                if (kriteriaCount < 2 || alternatifCount < 2) {
+                    alert('Kriteria dan Alternatif minimal harus berjumlah 2!');
+                    return;
+                }
 
-        // Event listener untuk input Enter di input Kriteria
-        kriteriaInput.addEventListener('keyup', (event) => {
-            if (event.key === 'Enter') {
-                addKriteria();
-            }
-        });
+                window.location.href = 'ahp-criteria-page.html';
+            });
 
-        // Event listener untuk input Enter di input Alternatif
-        alternatifInput.addEventListener('keyup', (event) => {
-            if (event.key === 'Enter') {
-                addAlternatif();
-            }
-        });
-
-        // Tombol lanjut dengan validasi jumlah kriteria dan alternatif
-        document.getElementById('lanjut').addEventListener('click', () => {
-            const kriteriaCount = listKriteria.value.trim().split('\n').filter(Boolean).length;
-            const alternatifCount = listAlternatif.value.trim().split('\n').filter(Boolean).length;
-
-            if (kriteriaCount < 2 || alternatifCount < 2) {
-                alert('Kriteria dan Alternatif minimal harus berjumlah 2!');
-                return;
-            }
-
-            window.location.href = 'ahp-criteria-page.html';
-        });
-
-        // Tombol Back
-        document.getElementById('back-button').addEventListener('click', () => {
-            window.location.href = 'index.html';
+            // Tombol Back
+            $('#back-button').click(function () {
+                window.location.href = 'index.html';
+            });
         });
     </script>
 

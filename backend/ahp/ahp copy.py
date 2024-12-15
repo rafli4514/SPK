@@ -292,3 +292,48 @@ class AHP:
         df_final = pd.DataFrame(self.final_ranking, index=self.alternatives, columns=['Skor Akhir'])
         df_final_sorted = df_final.sort_values(by='Skor Akhir', ascending=False)
         print(df_final_sorted)
+        
+    def run_ahp(self):
+        """
+        Menjalankan seluruh proses AHP secara terstruktur.
+        """
+        print("=== Selamat Datang di Program AHP ===")
+        
+        # Langkah 1: Tambahkan Kriteria
+        self.add_criteria()
+        if not self.criteria:
+            print("Proses AHP dibatalkan karena kurangnya kriteria.")
+            return
+        
+        # Langkah 2: Tambahkan Alternatif
+        self.add_alternatives()
+        if not self.alternatives:
+            print("Proses AHP dibatalkan karena kurangnya alternatif.")
+            return
+        
+        # Langkah 3: Input Perbandingan Berpasangan untuk Kriteria
+        self.input_comparisons_criteria()
+        if self.criteria_weights is None:
+            print("Proses AHP dibatalkan karena perbandingan kriteria gagal.")
+            return
+        
+        # Langkah 4: Input Perbandingan Berpasangan untuk Alternatif
+        self.input_comparisons_alternatives()
+        if not self.alternative_weights:
+            print("Proses AHP dibatalkan karena perbandingan alternatif gagal.")
+            return
+        
+        # Langkah 5: Hitung Bobot dan Ranking Akhir
+        self.calculate_weights()
+        
+        # Langkah 6: Tampilkan Hasil
+        self.display_results()
+        
+        print("\n=== Proses AHP Selesai ===")
+
+def main():
+    ahp = AHP()
+    ahp.run_ahp()
+
+if __name__ == "__main__":
+    main()
