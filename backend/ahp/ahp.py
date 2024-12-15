@@ -3,7 +3,7 @@
 import numpy as np
 import pandas as pd
 
-from .base_method import BaseMethod
+from ..base_method import BaseMethod
 
 class AHP(BaseMethod):
     def __init__(self, criteria, alternatives):

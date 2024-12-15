@@ -14,7 +14,8 @@
     <div class="bg-white w-full max-w-lg rounded-2xl shadow-lg">
         <!-- Header -->
         <div class="bg-violet-950 text-white py-4 px-6 rounded-t-2xl flex items-center justify-between">
-            <button class="text-2xl font-bold hover:text-gray-300">&larr;</button>
+            <!-- Tombol Back -->
+            <button id="back-button" class="text-2xl font-bold hover:text-gray-300">&larr;</button>
             <h1 class="text-center text-lg font-semibold flex-1">
                 Input Kriteria dan Alternatif (AHP)
             </h1>
@@ -108,9 +109,22 @@
             }
         });
 
-        // Tombol lanjut
+        // Tombol lanjut dengan validasi jumlah kriteria dan alternatif
         document.getElementById('lanjut').addEventListener('click', () => {
-            alert('Melanjutkan ke langkah berikutnya...');
+            const kriteriaCount = listKriteria.value.trim().split('\n').filter(Boolean).length;
+            const alternatifCount = listAlternatif.value.trim().split('\n').filter(Boolean).length;
+
+            if (kriteriaCount < 2 || alternatifCount < 2) {
+                alert('Kriteria dan Alternatif minimal harus berjumlah 2!');
+                return;
+            }
+
+            window.location.href = 'ahp-criteria-page.html';
+        });
+
+        // Tombol Back
+        document.getElementById('back-button').addEventListener('click', () => {
+            window.location.href = 'index.html';
         });
     </script>
 
