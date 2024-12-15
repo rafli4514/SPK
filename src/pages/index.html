@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pilih Metode Keputusan</title>
+  <link href="../build.css" rel="stylesheet">
+
+</head>
+<body class="flex items-center justify-center min-h-screen">
+  <!-- Container -->
+  <div class="bg-white max-w-4xl w-full h-full md:h-auto rounded-t-2xl shadow-lg mx-4">
+    <!-- Title -->
+    <h1 class="text-center text-xl md:text-2xl font-semibold text-white bg-violet-950 py-6 rounded-t-2xl">
+      Pilih Metode Pengambilan Keputusan
+    </h1>
+
+    <!-- Methods -->
+    <div class="grid grid-cols-2 md:grid-cols-3 gap-4 p-6">
+      <!-- AHP -->
+      <div class="method group flex flex-col items-center justify-center p-6 rounded-2xl hover:bg-rose-500 cursor-pointer transition-all" data-method="AHP">
+        <div class="icon w-16 h-16 bg-violet-950 rounded mb-4 group-hover:bg-white transition"></div>
+        <span class="font-semibold text-base group-hover:text-white">AHP</span>
+        <span class="text-xs text-center group-hover:text-white">Analytic Hierarchy Process</span>
+      </div>
+
+      <!-- SAW -->
+      <div class="method group flex flex-col items-center justify-center p-6 rounded-2xl hover:bg-rose-500 cursor-pointer transition-all" data-method="SAW">
+        <div class="icon w-16 h-16 bg-violet-950 rounded mb-4 group-hover:bg-white transition"></div>
+        <span class="font-semibold text-base group-hover:text-white">SAW</span>
+        <span class="text-xs text-center group-hover:text-white">Simple Additive Weighting</span>
+      </div>
+
+      <!-- TOPSIS -->
+      <div class="method group flex flex-col items-center justify-center p-6 rounded-2xl hover:bg-rose-500 cursor-pointer transition-all" data-method="TOPSIS">
+        <div class="icon w-16 h-16 bg-violet-950 rounded mb-4 group-hover:bg-white transition"></div>
+        <span class="font-semibold text-base group-hover:text-white">TOPSIS</span>
+      </div>
+
+      <!-- WP -->
+      <div class="method group flex flex-col items-center justify-center p-6 rounded-2xl hover:bg-rose-500 cursor-pointer transition-all" data-method="WP">
+        <div class="icon w-16 h-16 bg-violet-950 rounded mb-4 group-hover:bg-white transition"></div>
+        <span class="font-semibold text-base group-hover:text-white">WP</span>
+        <span class="text-xs text-center group-hover:text-white">Weighted Product</span>
+      </div>
+
+      <!-- Promethee -->
+      <div class="method group flex flex-col items-center justify-center p-6 rounded-2xl hover:bg-rose-500 cursor-pointer transition-all" data-method="Promethee">
+        <div class="icon w-16 h-16 bg-violet-950 rounded mb-4 group-hover:bg-white transition"></div>
+        <span class="font-semibold text-base group-hover:text-white">Promethee</span>
+      </div>
+
+      <!-- MAUT -->
+      <div class="method group flex flex-col items-center justify-center p-6 rounded-2xl hover:bg-rose-500 cursor-pointer transition-all" data-method="MAUT">
+        <div class="icon w-16 h-16 bg-violet-950 rounded mb-4 group-hover:bg-white transition"></div>
+        <span class="font-semibold text-base group-hover:text-white">MAUT</span>
+      </div>
+    </div>
+
+    <!-- Button -->
+    <div class="flex justify-center pb-6">
+      <button id="select-button" class="w-3/4 md:w-1/2 bg-rose-500 text-white text-lg font-semibold py-3 rounded-2xl hover:bg-rose-600 transition duration-200">
+        Pilih
+      </button>
+    </div>
+  </div>
+
+  <!-- Script -->
+  <script>
+    const methods = document.querySelectorAll('.method');
+    const selectButton = document.getElementById('select-button');
+    let selectedMethod = ""; // Tidak ada metode default
+
+    // Pemilihan metode
+    methods.forEach((method) => {
+      method.addEventListener('click', () => {
+        methods.forEach(m => {
+          m.classList.remove('bg-rose-500', 'text-white');
+          m.querySelector('.icon').classList.remove('bg-white');
+          m.querySelector('.icon').classList.add('bg-violet-950');
+        });
+
+        method.classList.add('bg-rose-500', 'text-white');
+        const icon = method.querySelector('.icon');
+        icon.classList.remove('bg-violet-950');
+        icon.classList.add('bg-white');
+        selectedMethod = method.dataset.method;
+      });
+    });
+
+    // Tombol Pilih
+
+    selectButton.addEventListener('click', () => {
+      if (selectedMethod) {
+        if (selectedMethod === "AHP") {
+          window.location.href = "ahp-page.html"; // Redirect ke AHP Page
+        } else {
+          alert(`Metode yang dipilih: ${selectedMethod}`);
+        }
+      } else {
+        alert("Silakan pilih salah satu metode terlebih dahulu!");
+      }
+    });
+    
+  </script>
+  
+</body>
+</html>

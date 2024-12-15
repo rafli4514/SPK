@@ -5,7 +5,7 @@
   "main": "main.js",
   "scripts": {
     "start": "electron ./main/main.js",
-    "build:css": "tailwindcss -i ./styles.css -o ./UI/build.css --watch"
+    "build:css": "tailwindcss -i ./styles.css -o ./src/build.css --watch"
   },
   "repository": {
     "type": "git",

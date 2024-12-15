@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AHP: Input Kriteria & Alternatif</title>
+    <link href="../build.css" rel="stylesheet">
+</head>
+
+<body class="flex items-center justify-center min-h-screen">
+
+    <!-- Container Utama -->
+    <div class="bg-white w-full max-w-lg rounded-2xl shadow-lg">
+        <!-- Header -->
+        <div class="bg-violet-950 text-white py-4 px-6 rounded-t-2xl flex items-center justify-between">
+            <button class="text-2xl font-bold hover:text-gray-300">&larr;</button>
+            <h1 class="text-center text-lg font-semibold flex-1">
+                Input Kriteria dan Alternatif (AHP)
+            </h1>
+        </div>
+
+        <!-- Content -->
+        <div class="p-6 space-y-6">
+            <!-- Input Kriteria -->
+            <div>
+                <label class="block text-gray-700 font-semibold mb-2">Kriteria</label>
+                <div class="flex space-x-2">
+                    <input type="text" id="kriteria" placeholder="Masukkan kriteria"
+                        class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-violet-500 focus:outline-none">
+                    <button id="add-kriteria"
+                        class="bg-violet-950 text-white px-4 py-2 rounded-lg hover:bg-violet-800">
+                        Tambah
+                    </button>
+                </div>
+                <textarea id="list-kriteria" readonly
+                    class="w-full mt-3 border rounded-lg p-3 h-24 focus:ring-2 focus:ring-violet-500"></textarea>
+            </div>
+
+            <!-- Input Alternatif -->
+            <div>
+                <label class="block text-gray-700 font-semibold mb-2">Alternatif</label>
+                <div class="flex space-x-2">
+                    <input type="text" id="alternatif" placeholder="Masukkan alternatif"
+                        class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-violet-500 focus:outline-none">
+                    <button id="add-alternatif"
+                        class="bg-violet-950 text-white px-4 py-2 rounded-lg hover:bg-violet-800">
+                        Tambah
+                    </button>
+                </div>
+                <textarea id="list-alternatif" readonly
+                    class="w-full mt-3 border rounded-lg p-3 h-24 focus:ring-2 focus:ring-violet-500"></textarea>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="p-6">
+            <button id="lanjut"
+                class="w-full bg-rose-500 text-white py-3 rounded-2xl text-lg font-semibold hover:bg-rose-600 transition duration-200">
+                Lanjut
+            </button>
+        </div>
+    </div>
+
+    <!-- Script -->
+    <script>
+        const addKriteriaBtn = document.getElementById('add-kriteria');
+        const kriteriaInput = document.getElementById('kriteria');
+        const listKriteria = document.getElementById('list-kriteria');
+
+        const addAlternatifBtn = document.getElementById('add-alternatif');
+        const alternatifInput = document.getElementById('alternatif');
+        const listAlternatif = document.getElementById('list-alternatif');
+
+        // Fungsi untuk menambahkan kriteria ke textarea
+        function addKriteria() {
+            if (kriteriaInput.value.trim()) {
+                listKriteria.value += `• ${kriteriaInput.value}\n`;
+                kriteriaInput.value = '';
+            }
+        }
+
+        // Fungsi untuk menambahkan alternatif ke textarea
+        function addAlternatif() {
+            if (alternatifInput.value.trim()) {
+                listAlternatif.value += `• ${alternatifInput.value}\n`;
+                alternatifInput.value = '';
+            }
+        }
+
+        // Event listener untuk tombol Tambah Kriteria
+        addKriteriaBtn.addEventListener('click', addKriteria);
+
+        // Event listener untuk tombol Tambah Alternatif
+        addAlternatifBtn.addEventListener('click', addAlternatif);
+
+        // Event listener untuk input Enter di input Kriteria
+        kriteriaInput.addEventListener('keyup', (event) => {
+            if (event.key === 'Enter') {
+                addKriteria();
+            }
+        });
+
+        // Event listener untuk input Enter di input Alternatif
+        alternatifInput.addEventListener('keyup', (event) => {
+            if (event.key === 'Enter') {
+                addAlternatif();
+            }
+        });
+
+        // Tombol lanjut
+        document.getElementById('lanjut').addEventListener('click', () => {
+            alert('Melanjutkan ke langkah berikutnya...');
+        });
+    </script>
+
+</body>
+
+</html>
