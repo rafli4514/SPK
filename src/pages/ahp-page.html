@@ -5,124 +5,95 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AHP: Input Kriteria & Alternatif</title>
-    <link href="../build.css" rel="stylesheet">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link href="../css/build.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        .loader {
+            border-top-color: #3498db;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .alert {
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .alert-error {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+    </style>
 </head>
 
-<body class="flex items-center justify-center min-h-screen">
+<body class="flex items-center justify-center min-h-screen bg-gray-100 font-inter">
 
     <!-- Container Utama -->
-    <div class="bg-white w-full max-w-lg rounded-2xl shadow-lg">
-        <!-- Header -->
+    <div class="bg-white w-full max-w-lg rounded-2xl shadow-lg overflow-hidden">
         <div class="bg-violet-950 text-white py-4 px-6 rounded-t-2xl flex items-center justify-between">
-            <!-- Tombol Back -->
-            <button id="back-button" class="text-2xl font-bold hover:text-gray-300">&larr;</button>
+            <button id="back-button" class="text-2xl font-bold hover:text-gray-300 focus:outline-none" aria-label="Kembali">&larr;</button>
             <h1 class="text-center text-lg font-semibold flex-1">
                 Input Kriteria dan Alternatif (AHP)
             </h1>
         </div>
 
-        <!-- Content -->
         <div class="p-6 space-y-6">
-            <!-- Input Kriteria -->
+            <div id="alert-container"></div>
+
             <div>
-                <label class="block text-gray-700 font-semibold mb-2">Kriteria</label>
+                <label for="kriteria" class="block text-gray-700 font-semibold mb-2">Kriteria</label>
                 <div class="flex space-x-2">
                     <input type="text" id="kriteria" placeholder="Masukkan kriteria"
-                        class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-violet-500 focus:outline-none">
+                        class="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-violet-500 focus:outline-none">
                     <button id="add-kriteria"
-                        class="bg-violet-950 text-white px-4 py-2 rounded-lg hover:bg-violet-800">
+                        class="bg-violet-950 text-white px-4 py-2 rounded-lg hover:bg-violet-800 focus:outline-none focus:ring-2 focus:ring-violet-500">
                         Tambah
                     </button>
                 </div>
                 <textarea id="list-kriteria" readonly
-                    class="w-full mt-3 border rounded-lg p-3 h-24 focus:ring-2 focus:ring-violet-500"></textarea>
+                    class="w-full mt-3 border border-gray-300 rounded-lg p-3 h-24 focus:ring-2 focus:ring-violet-500"></textarea>
             </div>
 
-            <!-- Input Alternatif -->
             <div>
-                <label class="block text-gray-700 font-semibold mb-2">Alternatif</label>
+                <label for="alternatif" class="block text-gray-700 font-semibold mb-2">Alternatif</label>
                 <div class="flex space-x-2">
                     <input type="text" id="alternatif" placeholder="Masukkan alternatif"
-                        class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-violet-500 focus:outline-none">
+                        class="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-violet-500 focus:outline-none">
                     <button id="add-alternatif"
-                        class="bg-violet-950 text-white px-4 py-2 rounded-lg hover:bg-violet-800">
+                        class="bg-violet-950 text-white px-4 py-2 rounded-lg hover:bg-violet-800 focus:outline-none focus:ring-2 focus:ring-violet-500">
                         Tambah
                     </button>
                 </div>
                 <textarea id="list-alternatif" readonly
-                    class="w-full mt-3 border rounded-lg p-3 h-24 focus:ring-2 focus:ring-violet-500"></textarea>
+                    class="w-full mt-3 border border-gray-300 rounded-lg p-3 h-24 focus:ring-2 focus:ring-violet-500"></textarea>
             </div>
         </div>
 
-        <!-- Footer -->
         <div class="p-6">
             <button id="lanjut"
-                class="w-full bg-rose-500 text-white py-3 rounded-2xl text-lg font-semibold hover:bg-rose-600 transition duration-200">
+                class="w-full bg-rose-500 text-white py-3 rounded-2xl text-lg font-semibold hover:bg-rose-600 transition duration-200 focus:outline-none focus:ring-4 focus:ring-rose-300">
                 Lanjut
             </button>
         </div>
     </div>
 
-    <!-- Script -->
-    <script>
-        $(document).ready(function () {
-            // Fungsi untuk menambahkan kriteria ke textarea
-            $('#add-kriteria').click(function () {
-                const kriteriaValue = $('#kriteria').val().trim();
-                if (kriteriaValue) {
-                    $('#list-kriteria').val(function (i, val) {
-                        return val + `• ${kriteriaValue}\n`;
-                    });
-                    $('#kriteria').val('');
-                }
-            });
+    <div id="loading-overlay" class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-12 w-12"></div>
+    </div>
 
-            // Fungsi untuk menambahkan alternatif ke textarea
-            $('#add-alternatif').click(function () {
-                const alternatifValue = $('#alternatif').val().trim();
-                if (alternatifValue) {
-                    $('#list-alternatif').val(function (i, val) {
-                        return val + `• ${alternatifValue}\n`;
-                    });
-                    $('#alternatif').val('');
-                }
-            });
-
-            // Fungsi untuk menangani input Enter di input Kriteria
-            $('#kriteria').on('keyup', function (event) {
-                if (event.key === 'Enter') {
-                    $('#add-kriteria').click();
-                }
-            });
-
-            // Fungsi untuk menangani input Enter di input Alternatif
-            $('#alternatif').on('keyup', function (event) {
-                if (event.key === 'Enter') {
-                    $('#add-alternatif').click();
-                }
-            });
-
-            // Tombol lanjut dengan validasi jumlah kriteria dan alternatif
-            $('#lanjut').click(function () {
-                const kriteriaCount = $('#list-kriteria').val().trim().split('\n').filter(Boolean).length;
-                const alternatifCount = $('#list-alternatif').val().trim().split('\n').filter(Boolean).length;
-
-                if (kriteriaCount < 2 || alternatifCount < 2) {
-                    alert('Kriteria dan Alternatif minimal harus berjumlah 2!');
-                    return;
-                }
-
-                window.location.href = 'ahp-criteria-page.html';
-            });
-
-            // Tombol Back
-            $('#back-button').click(function () {
-                window.location.href = 'index.html';
-            });
-        });
-    </script>
-
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="../js/input.js"></script>
 </body>
 
 </html>

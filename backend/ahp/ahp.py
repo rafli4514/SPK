@@ -1,127 +1,118 @@
 # backend/ahp/ahp.py
+
 import numpy as np
 
-
 class AHP:
-    def __init__(self, criteria, alternatives):
-        """
-        Inisialisasi objek AHP dengan kriteria dan alternatif yang diberikan.
-        
-        Parameters:
-            criteria (list): Daftar nama kriteria
-            alternatives (list): Daftar nama alternatif
-        """
-        self.criteria = criteria
-        self.alternatives = alternatives
-        self.criteria_matrix = np.ones((len(criteria), len(criteria)))
+    def __init__(self):
+        self.criteria = []
+        self.alternatives = []
+        self.criteria_matrix = None
         self.criteria_weights = None
-        self.alternative_matrices = {crit: np.ones((len(alternatives), len(alternatives))) for crit in criteria}
+        self.criteria_CR = None
+        self.alternative_comparisons = {}
         self.alternative_weights = {}
+        self.alternative_CR = {}
         self.final_ranking = None
+        self.warnings = []
+
+    def set_criteria(self, criteria):
+        self.criteria = criteria
+        n = len(criteria)
+        self.criteria_matrix = np.ones((n, n))
+
+    def set_alternatives(self, alternatives):
+        self.alternatives = alternatives
+        for crit in self.criteria:
+            self.alternative_comparisons[crit] = np.ones((len(alternatives), len(alternatives)))
 
     def set_criteria_comparisons(self, comparisons):
-        """
-        Mengatur matriks perbandingan kriteria berdasarkan input perbandingan.
+        if self.criteria_matrix is None:
+            raise ValueError("Matriks kriteria belum diinisialisasi.")
+        for comp in comparisons:
+            i, j, value = int(comp['i']), int(comp['j']), float(comp['value'])
+            if i >= len(self.criteria) or j >= len(self.criteria):
+                raise IndexError("Indeks kriteria di luar jangkauan.")
+            self.criteria_matrix[i][j] = value
+            self.criteria_matrix[j][i] = 1 / value
+        weights, CR = self.calculate_weights_from_matrix(self.criteria_matrix)
+        self.criteria_weights = weights
+        self.criteria_CR = CR
+        return CR
 
-        Parameters:
-            comparisons (list of tuples): Setiap tuple berisi perbandingan antar kriteria dalam format (i, j, value).
-                i dan j adalah indeks kriteria, dan value adalah nilai perbandingan kriteria[i] terhadap kriteria[j].
-        """
-        for (i, j, value) in comparisons:
-            if not (0 <= i < len(self.criteria)) or not (0 <= j < len(self.criteria)):
-                raise ValueError(f"Indeks {i}, {j} di criteria_comparisons berada di luar rentang yang valid.")
-            if not isinstance(value, (int, float)) or value <= 0:
-                raise ValueError(f"Nilai perbandingan harus berupa angka positif, got {value}.")
-            self.criteria_matrix[i, j] = value
-            self.criteria_matrix[j, i] = 1 / value
-
-    def set_alternative_comparisons(self, criteria, comparisons):
-        """
-        Mengatur matriks perbandingan alternatif berdasarkan kriteria tertentu.
-
-        Parameters:
-            criteria (str): Nama kriteria yang sedang diproses.
-            comparisons (list of tuples): Setiap tuple berisi perbandingan antar alternatif untuk kriteria tertentu
-                dalam format (i, j, value), di mana value adalah nilai perbandingan alternatif[i] terhadap alternatif[j].
-        """
-        if criteria not in self.criteria:
-            raise ValueError(f"Kriteria '{criteria}' tidak ditemukan dalam daftar kriteria.")
-        
-        matrix = self.alternative_matrices[criteria]
-        for (i, j, value) in comparisons:
-            if not (0 <= i < len(self.alternatives)) or not (0 <= j < len(self.alternatives)):
-                raise ValueError(f"Indeks {i}, {j} di alternative_comparisons untuk kriteria '{criteria}' berada di luar rentang yang valid.")
-            if not isinstance(value, (int, float)) or value <= 0:
-                raise ValueError(f"Nilai perbandingan harus berupa angka positif, got {value}.")
-            matrix[i, j] = value
-            matrix[j, i] = 1 / value
+    def set_alternatives_comparisons(self, criteria_name, comparisons):
+        if criteria_name not in self.criteria:
+            raise ValueError(f"Criteria '{criteria_name}' tidak ada dalam kriteria yang telah diatur.")
+        matrix = self.alternative_comparisons.get(criteria_name)
+        if matrix is None:
+            raise ValueError(f"Matriks alternatif untuk kriteria '{criteria_name}' belum diinisialisasi.")
+        for comp in comparisons:
+            i, j, value = int(comp['i']), int(comp['j']), float(comp['value'])
+            if i >= len(self.alternatives) or j >= len(self.alternatives):
+                raise IndexError("Indeks alternatif di luar jangkauan.")
+            matrix[i][j] = value
+            matrix[j][i] = 1 / value
+        weights, CR = self.calculate_weights_from_matrix(matrix)
+        self.alternative_weights[criteria_name] = weights
+        self.alternative_CR[criteria_name] = CR
+        return CR
 
     def calculate_weights_from_matrix(self, matrix):
-        """
-        Menghitung bobot (prioritas) menggunakan eigenvector utama dari matriks perbandingan berpasangan.
+        # Normalisasi kolom
+        column_sums = np.sum(matrix, axis=0)
+        if np.any(column_sums == 0):
+            raise ValueError("Jumlah kolom pada matriks tidak boleh nol.")
+        normalized_matrix = matrix / column_sums
 
-        Parameters:
-            matrix (np.ndarray): Matriks perbandingan berpasangan (n x n).
-        
-        Returns:
-            np.ndarray: Vektor bobot yang telah dinormalisasi.
-        """
-        eigvals, eigvecs = np.linalg.eig(matrix)
-        max_index = np.argmax(eigvals.real)  # Menemukan indeks nilai eigen terbesar
-        principal_eigvec = eigvecs[:, max_index].real  # Mengambil vektor eigen utama
-        normalized_weights = principal_eigvec / principal_eigvec.sum()  # Normalisasi bobot
-        return normalized_weights
+        # Hitung bobot sebagai rata-rata baris matriks yang dinormalisasi
+        weights = np.mean(normalized_matrix, axis=1)
 
-    def calculate_consistency_ratio(self, matrix, weights):
-        """
-        Menghitung **Consistency Ratio (CR)** untuk memeriksa konsistensi matriks perbandingan.
+        # Hitung lambda_max
+        weighted_sum = matrix @ weights
+        lambda_max = np.mean(weighted_sum / weights)
 
-        Parameters:
-            matrix (np.ndarray): Matriks perbandingan berpasangan (n x n).
-            weights (np.ndarray): Vektor bobot dari matriks perbandingan.
-        
-        Returns:
-            float: Consistency Ratio (CR).
-        """
-        n = matrix.shape[0]
-        lambda_max = np.dot(matrix, weights).sum() / weights.sum()  # Menghitung lambda_max
-        CI = (lambda_max - n) / (n - 1)  # Menghitung Consistency Index (CI)
-        # Random Index (RI) berdasarkan ukuran matriks
-        RI_dict = {1: 0.0, 2: 0.0, 3: 0.58, 4: 0.90, 5: 1.12, 6: 1.24, 7: 1.32, 8: 1.41, 9: 1.45, 10: 1.49}
-        RI = RI_dict.get(n, 1.49)  # Default ke 1.49 untuk n > 10
-        return CI / RI if RI != 0 else 0  # Menghitung CR
+        # Hitung Consistency Index (CI)
+        n = len(weights)
+        CI = (lambda_max - n) / (n - 1)
 
-    def perform_ahp(self):
-        """
-        Melakukan perhitungan AHP, termasuk menghitung bobot kriteria dan alternatif,
-        serta menghasilkan ranking akhir alternatif.
+        # Hitung Random Index (RI)
+        RI_dict = {1: 0.00, 2: 0.00, 3: 0.58, 4: 0.90, 5: 1.12,
+                   6: 1.24, 7: 1.32, 8: 1.41, 9: 1.45, 10: 1.49}
+        RI = RI_dict.get(n, 1.49)  # Default RI untuk n > 10
 
-        Perhitungan dilakukan dengan metode Eigenvector.
-        """
+        # Hitung Consistency Ratio (CR)
+        CR = CI / RI if RI != 0 else 0
 
-        # Hitung bobot kriteria (tanpa pengecekan CR)
-        self.criteria_weights = self.calculate_weights_from_matrix(self.criteria_matrix)
+        return weights, CR
 
-        # Hitung bobot alternatif untuk setiap kriteria (tanpa pengecekan CR)
-        for crit, matrix in self.alternative_matrices.items():
-            weights = self.calculate_weights_from_matrix(matrix)
-            self.alternative_weights[crit] = weights
-
-        # Hitung ranking akhir dengan bobot kriteria dan alternatif
-        self.final_ranking = np.zeros(len(self.alternatives))
-        for i, crit in enumerate(self.criteria):
-            self.final_ranking += self.criteria_weights[i] * self.alternative_weights[crit]
-
+    def calculate_weights(self):
+        if self.criteria_weights is None:
+            raise ValueError("Perbandingan kriteria belum diinput.")
+        for crit in self.criteria:
+            if crit not in self.alternative_weights:
+                raise ValueError(f"Perbandingan alternatif untuk kriteria '{crit}' belum diinput.")
+        # Hitung skor akhir
+        scores = np.zeros(len(self.alternatives))
+        for crit, weight in zip(self.criteria, self.criteria_weights):
+            scores += weight * self.alternative_weights[crit]
+        self.final_ranking = scores
+        return self.final_ranking
 
     def get_results(self):
-        """
-        Mengembalikan hasil perhitungan AHP, termasuk bobot kriteria, bobot alternatif, dan ranking akhir alternatif.
-
-        Returns:
-            dict: Hasil perhitungan AHP dalam format dictionary.
-        """
-        return {
-            "criteria_weights": self.criteria_weights.tolist(),
-            "alternative_weights": {k: v.tolist() for k, v in self.alternative_weights.items()},
-            "final_ranking": {self.alternatives[i]: score for i, score in enumerate(self.final_ranking)}
+        if self.final_ranking is None:
+            return None
+        results = {
+            'criteria_matrix': {crit: {c: self.criteria_matrix[i][j] for j, c in enumerate(self.criteria)} for i, crit in enumerate(self.criteria)},
+            'criteria_weights': {crit: {'Bobot': round(weight, 4)} for crit, weight in zip(self.criteria, self.criteria_weights)},
+            'alternative_matrices': {},
+            'alternative_weights': {},
+            'final_ranking': {
+                'Skor Akhir': {alt: round(score, 4) for alt, score in zip(self.alternatives, self.final_ranking)}
+            },
+            'CR': round(self.criteria_CR, 4),
+            'warnings': self.warnings
         }
+        for crit in self.criteria:
+            matrix = self.alternative_comparisons[crit]
+            results['alternative_matrices'][crit] = {alt: {a: matrix[i][j] for j, a in enumerate(self.alternatives)} for i, alt in enumerate(self.alternatives)}
+            results['alternative_weights'][crit] = {alt: {'Bobot': round(weight, 4)} for alt, weight in zip(self.alternatives, self.alternative_weights[crit])}
+        return results

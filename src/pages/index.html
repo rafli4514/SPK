@@ -5,104 +5,216 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Pilih Metode Keputusan</title>
   <link href="../build.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    .method {
+      transition: transform 0.3s, background-color 0.3s;
+    }
 
+    .method:hover {
+      transform: translateY(-5px);
+    }
+
+    .method.selected {
+      border: 4px solid #EF4444; 
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    /* Penyesuaian responsif */
+    @media (max-width: 768px) {
+      .methods-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 640px) {
+      .methods-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
 </head>
-<body class="flex items-center justify-center min-h-screen">
-  <!-- Container -->
-  <div class="bg-white max-w-4xl w-full h-full md:h-auto rounded-t-2xl shadow-lg mx-4">
-    <!-- Title -->
-    <h1 class="text-center text-xl md:text-2xl font-semibold text-white bg-violet-950 py-6 rounded-t-2xl">
-      Pilih Metode Pengambilan Keputusan
-    </h1>
+<body class="flex items-center justify-center min-h-screen bg-gray-100 p-4 font-inter">
 
-    <!-- Methods -->  
-    <div class="grid grid-cols-2 md:grid-cols-3 gap-4 p-6">
-      <!-- AHP -->
-      <div class="method group flex flex-col items-center justify-center p-6 rounded-2xl hover:bg-rose-500 cursor-pointer transition-all" data-method="AHP">
-        <div class="icon w-16 h-16 bg-violet-950 rounded mb-4 group-hover:bg-white transition"></div>
-        <span class="font-semibold text-base group-hover:text-white">AHP</span>
-        <span class="text-xs text-center group-hover:text-white">Analytic Hierarchy Process</span>
+  <!-- Kontainer Utama -->
+  <div class="bg-white max-w-4xl w-full rounded-2xl shadow-lg overflow-hidden">
+    <!-- Header -->
+    <header class="bg-violet-700 py-6">
+      <h1 class="text-center text-2xl md:text-3xl font-bold text-white">
+        Pilih Metode Pengambilan Keputusan
+      </h1>
+    </header>
+
+    <!-- Metode-metode -->
+    <main class="p-6">
+      <div class="methods-grid grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+        <!-- AHP -->
+        <div class="method group flex flex-col items-center justify-center p-6 rounded-xl bg-violet-800 text-white cursor-pointer hover:bg-violet-900 focus:outline-none focus:ring-4 focus:ring-violet-300" data-method="AHP" role="button" tabindex="0" aria-label="Analytic Hierarchy Process">
+          <svg class="w-16 h-16 mb-4 text-white group-hover:text-yellow-300 transition-colors duration-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14v7m0-7l3.09-1.545a1 1 0 011.82.0L22 14m-10-6v6" />
+          </svg>
+          <span class="font-semibold text-lg group-hover:text-yellow-300 transition-colors duration-300">AHP</span>
+          <span class="text-sm text-center mt-1 group-hover:text-yellow-300 transition-colors duration-300">Analytic Hierarchy Process</span>
+        </div>
+
+        <!-- SAW -->
+        <div class="method group flex flex-col items-center justify-center p-6 rounded-xl bg-violet-800 text-white cursor-pointer hover:bg-violet-900 focus:outline-none focus:ring-4 focus:ring-violet-300" data-method="SAW" role="button" tabindex="0" aria-label="Simple Additive Weighting">
+          <svg class="w-16 h-16 mb-4 text-white group-hover:text-yellow-300 transition-colors duration-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l3 18h2l3-14h2l3 14h2l3-18h2" />
+          </svg>
+          <span class="font-semibold text-lg group-hover:text-yellow-300 transition-colors duration-300">SAW</span>
+          <span class="text-sm text-center mt-1 group-hover:text-yellow-300 transition-colors duration-300">Simple Additive Weighting</span>
+        </div>
+
+        <!-- TOPSIS -->
+        <div class="method group flex flex-col items-center justify-center p-6 rounded-xl bg-violet-800 text-white cursor-pointer hover:bg-violet-900 focus:outline-none focus:ring-4 focus:ring-violet-300" data-method="TOPSIS" role="button" tabindex="0" aria-label="Technique for Order Preference by Similarity to Ideal Solution">
+          <svg class="w-16 h-16 mb-4 text-white group-hover:text-yellow-300 transition-colors duration-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+          <span class="font-semibold text-lg group-hover:text-yellow-300 transition-colors duration-300">TOPSIS</span>
+          <span class="text-sm text-center mt-1 group-hover:text-yellow-300 transition-colors duration-300">Technique for Order Preference by Similarity to Ideal Solution</span>
+        </div>
+
+        <!-- WP -->
+        <div class="method group flex flex-col items-center justify-center p-6 rounded-xl bg-violet-800 text-white cursor-pointer hover:bg-violet-900 focus:outline-none focus:ring-4 focus:ring-violet-300" data-method="WP" role="button" tabindex="0" aria-label="Weighted Product">
+          <svg class="w-16 h-16 mb-4 text-white group-hover:text-yellow-300 transition-colors duration-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-6a2 2 0 012-2h2a2 2 0 012 2v6m-6 0h6" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 11V5m0 0a2 2 0 10-2 2m2-2a2 2 0 012 2" />
+          </svg>
+          <span class="font-semibold text-lg group-hover:text-yellow-300 transition-colors duration-300">WP</span>
+          <span class="text-sm text-center mt-1 group-hover:text-yellow-300 transition-colors duration-300">Weighted Product</span>
+        </div>
+
+        <!-- Promethee -->
+        <div class="method group flex flex-col items-center justify-center p-6 rounded-xl bg-violet-800 text-white cursor-pointer hover:bg-violet-900 focus:outline-none focus:ring-4 focus:ring-violet-300" data-method="Promethee" role="button" tabindex="0" aria-label="Preference Ranking Organization METHod for Enrichment Evaluations">
+          <svg class="w-16 h-16 mb-4 text-white group-hover:text-yellow-300 transition-colors duration-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v8m0 0l-4-4m4 4l4-4" />
+          </svg>
+          <span class="font-semibold text-lg group-hover:text-yellow-300 transition-colors duration-300">Promethee</span>
+          <span class="text-sm text-center mt-1 group-hover:text-yellow-300 transition-colors duration-300">Preference Ranking Organization METHod for Enrichment Evaluations</span>
+        </div>
+
+        <!-- MAUT -->
+        <div class="method group flex flex-col items-center justify-center p-6 rounded-xl bg-violet-800 text-white cursor-pointer hover:bg-violet-900 focus:outline-none focus:ring-4 focus:ring-violet-300" data-method="MAUT" role="button" tabindex="0" aria-label="Multi-Attribute Utility Theory">
+          <svg class="w-16 h-16 mb-4 text-white group-hover:text-yellow-300 transition-colors duration-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12h3m6 0h3m6 0h3m-9 9h3m-6-6h3m6-6h3" />
+          </svg>
+          <span class="font-semibold text-lg group-hover:text-yellow-300 transition-colors duration-300">MAUT</span>
+          <span class="text-sm text-center mt-1 group-hover:text-yellow-300 transition-colors duration-300">Multi-Attribute Utility Theory</span>
+        </div>
       </div>
 
-      <!-- SAW -->
-      <div class="method group flex flex-col items-center justify-center p-6 rounded-2xl hover:bg-rose-500 cursor-pointer transition-all" data-method="SAW">
-        <div class="icon w-16 h-16 bg-violet-950 rounded mb-4 group-hover:bg-white transition"></div>
-        <span class="font-semibold text-base group-hover:text-white">SAW</span>
-        <span class="text-xs text-center group-hover:text-white">Simple Additive Weighting</span>
-      </div>
-
-      <!-- TOPSIS -->
-      <div class="method group flex flex-col items-center justify-center p-6 rounded-2xl hover:bg-rose-500 cursor-pointer transition-all" data-method="TOPSIS">
-        <div class="icon w-16 h-16 bg-violet-950 rounded mb-4 group-hover:bg-white transition"></div>
-        <span class="font-semibold text-base group-hover:text-white">TOPSIS</span>
-      </div>
-
-      <!-- WP -->
-      <div class="method group flex flex-col items-center justify-center p-6 rounded-2xl hover:bg-rose-500 cursor-pointer transition-all" data-method="WP">
-        <div class="icon w-16 h-16 bg-violet-950 rounded mb-4 group-hover:bg-white transition"></div>
-        <span class="font-semibold text-base group-hover:text-white">WP</span>
-        <span class="text-xs text-center group-hover:text-white">Weighted Product</span>
-      </div>
-
-      <!-- Promethee -->
-      <div class="method group flex flex-col items-center justify-center p-6 rounded-2xl hover:bg-rose-500 cursor-pointer transition-all" data-method="Promethee">
-        <div class="icon w-16 h-16 bg-violet-950 rounded mb-4 group-hover:bg-white transition"></div>
-        <span class="font-semibold text-base group-hover:text-white">Promethee</span>
-      </div>
-
-      <!-- MAUT -->
-      <div class="method group flex flex-col items-center justify-center p-6 rounded-2xl hover:bg-rose-500 cursor-pointer transition-all" data-method="MAUT">
-        <div class="icon w-16 h-16 bg-violet-950 rounded mb-4 group-hover:bg-white transition"></div>
-        <span class="font-semibold text-base group-hover:text-white">MAUT</span>
+      <!-- Tombol Pilih -->
+      <div class="flex justify-center mt-8">
+        <button id="select-button" class="w-full sm:w-3/4 md:w-1/2 bg-rose-500 hover:bg-rose-600 text-white text-lg font-semibold py-3 rounded-xl shadow-md transition duration-200 focus:outline-none focus:ring-4 focus:ring-rose-300">
+          Pilih
+        </button>
       </div>
     </div>
 
-    <!-- Button -->
-    <div class="flex justify-center pb-6">
-      <button id="select-button" class="w-3/4 md:w-1/2 bg-rose-500 text-white text-lg font-semibold py-3 rounded-2xl hover:bg-rose-600 transition duration-200">
-        Pilih
-      </button>
+    <!-- Template Tooltip -->
+    <div id="tooltip" class="absolute bg-black text-white text-xs rounded py-1 px-2 opacity-0 transition-opacity duration-300 pointer-events-none">
+      Tooltip Text
     </div>
-  </div>
 
-  <!-- Script -->
-  <script>
-    const methods = document.querySelectorAll('.method');
-    const selectButton = document.getElementById('select-button');
-    let selectedMethod = ""; // Tidak ada metode default
+    <!-- JavaScript untuk Interaktivitas -->
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const methods = document.querySelectorAll('.method');
+        const selectButton = document.getElementById('select-button');
+        let selectedMethod = "";
 
-    // Pemilihan metode
-    methods.forEach((method) => {
-      method.addEventListener('click', () => {
-        methods.forEach(m => {
-          m.classList.remove('bg-rose-500', 'text-white');
-          m.querySelector('.icon').classList.remove('bg-white');
-          m.querySelector('.icon').classList.add('bg-violet-950');
+        // Elemen Tooltip
+        const tooltip = document.getElementById('tooltip');
+
+        // Fungsi untuk menampilkan tooltip
+        function showTooltip(event, text) {
+          tooltip.textContent = text;
+          tooltip.style.top = `${event.pageY + 10}px`;
+          tooltip.style.left = `${event.pageX + 10}px`;
+          tooltip.classList.remove('opacity-0');
+        }
+
+        // Fungsi untuk menyembunyikan tooltip
+        function hideTooltip() {
+          tooltip.classList.add('opacity-0');
+        }
+
+        // Pemilihan metode
+        methods.forEach((method) => {
+          method.addEventListener('click', () => {
+            // Toggle seleksi
+            if (method.classList.contains('selected')) {
+              method.classList.remove('selected');
+              selectedMethod = "";
+            } else {
+              // Deselect semua metode lainnya
+              methods.forEach(m => {
+                m.classList.remove('selected');
+              });
+              // Pilih metode yang diklik
+              method.classList.add('selected');
+              selectedMethod = method.dataset.method;
+            }
+          });
+
+          method.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              method.click();
+            }
+          });
+
+          method.addEventListener('mouseenter', (e) => {
+            const label = method.getAttribute('aria-label');
+            showTooltip(e, label);
+          });
+
+          method.addEventListener('mousemove', (e) => {
+            const label = method.getAttribute('aria-label');
+            showTooltip(e, label);
+          });
+
+          method.addEventListener('mouseleave', hideTooltip);
         });
 
-        method.classList.add('bg-rose-500', 'text-white');
-        const icon = method.querySelector('.icon');
-        icon.classList.remove('bg-violet-950');
-        icon.classList.add('bg-white');
-        selectedMethod = method.dataset.method;
+        selectButton.addEventListener('click', () => {
+          if (selectedMethod) {
+            if (selectedMethod === "AHP") {
+              window.location.href = "ahp-page.html";
+            } else {
+              window.location.href = `${selectedMethod.toLowerCase()}-page.html`;
+            }
+          } else {
+            selectButton.classList.add('animate-shake');
+            setTimeout(() => {
+              selectButton.classList.remove('animate-shake');
+            }, 500);
+            alert("Silakan pilih salah satu metode terlebih dahulu!");
+          }
+        });
+
+        const style = document.createElement('style');
+        style.innerHTML = `
+          @keyframes shake {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            50% { transform: translateX(5px); }
+            75% { transform: translateX(-5px); }
+            100% { transform: translateX(0); }
+          }
+
+          .animate-shake {
+            animation: shake 0.5s;
+          }
+        `;
+        document.head.appendChild(style);
       });
-    });
-
-    // Tombol Pilih
-
-    selectButton.addEventListener('click', () => {
-      if (selectedMethod) {
-        if (selectedMethod === "AHP") {
-          window.location.href = "ahp-page.html"; // Redirect ke AHP Page
-        } else {
-          alert(`Metode yang dipilih: ${selectedMethod}`);
-        }
-      } else {
-        alert("Silakan pilih salah satu metode terlebih dahulu!");
-      }
-    });
-    
-  </script>
-  
+    </script>
 </body>
 </html>

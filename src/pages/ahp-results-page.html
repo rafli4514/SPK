@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Hasil Perhitungan AHP</title>
+    <link href="../css/build.css" rel="stylesheet">
+    <style>
+        .loader {
+            border-top-color: transparent;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+        }
+
+        .alert {
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .alert-error {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+    <div class="bg-white w-full max-w-5xl rounded-lg shadow-lg flex flex-col h-full">
+        <!-- Header -->
+        <div class="bg-indigo-600 text-white py-4 px-6 rounded-t-lg flex items-center">
+            <button onclick="history.back()" class="mr-4 hover:text-gray-200 focus:outline-none">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6"
+                     fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" 
+                          stroke-width="2" d="M15 19l-7-7 7-7" />
+                </svg>
+            </button>
+            <h1 class="text-xl font-semibold">Hasil Perhitungan AHP</h1>
+        </div>
+
+        <!-- Alert Container -->
+        <div class="px-6 py-3">
+            <div id="alert-container"></div>
+        </div>
+
+        <!-- Loading Indicator -->
+        <div id="loading-indicator" class="flex-1 flex flex-col items-center justify-center bg-white">
+            <div class="loader ease-linear rounded-full border-8 border-t-8 border-gray-200 h-16 w-16 mb-4 animate-spin"></div>
+            <p class="text-gray-700 text-lg">Memuat data, harap tunggu...</p>
+        </div>
+
+        <!-- Content -->
+        <div id="content" class="flex-1 p-6 overflow-auto space-y-6 hidden">
+            <!-- Matriks Perbandingan Kriteria -->
+            <div>
+                <h2 class="text-2xl font-semibold mb-4 text-indigo-700">Matriks Perbandingan Kriteria</h2>
+                <div id="criteria-matrix" class="table-responsive"></div>
+            </div>
+
+            <!-- Bobot Kriteria -->
+            <div>
+                <h2 class="text-2xl font-semibold mb-4 text-indigo-700">Bobot Kriteria (Normalisasi)</h2>
+                <div id="criteria-weights" class="table-responsive"></div>
+            </div>
+
+            <!-- Matriks dan Bobot Alternatif -->
+            <div id="alternative-sections" class="space-y-6">
+                <!-- Alternatif Matrices -->
+                <div id="alternative-matrices-section"></div>
+                <!-- Alternatif Weights -->
+                <div id="alternative-weights-section"></div>
+            </div>
+
+            <!-- Final Ranking -->
+            <div>
+                <h2 class="text-2xl font-semibold mb-4 text-indigo-700">Ranking Akhir Alternatif</h2>
+                <div id="final-ranking" class="table-responsive"></div>
+            </div>
+        </div>
+
+        <!-- Export Button -->
+        <div class="p-6 bg-gray-50">
+            <button
+                id="export-button"
+                class="w-full bg-indigo-600 text-white py-3 rounded-lg text-lg font-semibold hover:bg-indigo-700 transition duration-200 flex items-center justify-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2"
+                     fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                          stroke-width="2" d="M12 4v16m8-8H4" />
+                </svg>
+                Ekspor ke Excel
+            </button>
+        </div>
+
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="../js/ahp-result-page.js"></script>
+</body>
+</html>

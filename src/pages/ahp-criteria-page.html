@@ -2,172 +2,94 @@
 <html lang="id">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Input Perbandingan Alternatif</title>
-    <link href="../build.css" rel="stylesheet">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Input Perbandingan Kriteria (AHP)</title>
+    <link href="../css/build.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        .spinner-border {
+            border-top-color: transparent;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .alert {
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .alert-error {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        .readonly-input {
+            background-color: #f3f4f6;
+            cursor: not-allowed;
+        }
+    </style>
 </head>
 
-<body class="flex items-center justify-center min-h-screen">
+<body class="min-h-screen flex flex-col items-center bg-gray-100 p-4 font-inter">
 
     <!-- Container Utama -->
-    <div class="bg-white w-full max-w-lg rounded-2xl shadow-lg">
-        <!-- Header -->
-        <div class="bg-violet-950 text-white py-4 px-6 rounded-t-2xl flex items-center">
-            <button class="text-2xl font-bold hover:text-gray-300">&larr;</button>
-            <h1 class="text-center flex-1 text-lg font-semibold">
-                Input Perbandingan Berpasangan Alternatif (AHP)
+    <div class="bg-white w-full max-w-4xl rounded-2xl shadow-lg overflow-hidden">
+        <div class="bg-violet-950 text-white py-4 px-6 rounded-t-2xl flex items-center justify-between">
+            <button id="back-button" class="text-2xl font-bold hover:text-gray-300 focus:outline-none" aria-label="Kembali">&larr;</button>
+            <h1 class="text-center text-lg font-semibold flex-1">
+                Input Perbandingan Kriteria (AHP)
             </h1>
+            <div class="w-8"></div>
         </div>
 
-        <!-- Sub Header -->
+        <!-- Container Pesan Alert -->
+        <div class="px-4 py-2 text-center">
+            <div id="alert-container"></div>
+        </div>
+
+        <!-- Instruksi -->
         <div class="px-4 py-2 text-center">
             <p class="text-gray-800 font-semibold">
-                Masukkan Nilai Perbandingan Antar Alternatif untuk setiap kriteria<br>
+                Masukkan Nilai Perbandingan Antar Kriteria (Isi hanya bagian atas diagonal)
             </p>
         </div>
 
-        <!-- Pilihan Kriteria -->
-        <div class="flex justify-center space-x-4 py-4">
-            <button class="bg-violet-600 text-white py-2 px-4 rounded-lg font-medium hover:bg-violet-700 transition">
-                Kriteria 1
-            </button>
-            <button class="bg-violet-600 text-white py-2 px-4 rounded-lg font-medium hover:bg-violet-700 transition">
-                Kriteria 2
-            </button>
-        </div>
-
-        <!-- Matriks Perbandingan -->
-        <div class="px-6 py-4">
-            <table class="w-full border border-gray-300 text-center">
-                <thead>
-                    <tr class="bg-gray-200">
-                        <th class="border border-gray-300 p-2"></th>
-                        <th class="border border-gray-300 p-2">Alternatif 1</th>
-                        <th class="border border-gray-300 p-2">Alternatif 2</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td class="border border-gray-300 p-2 font-semibold">Alternatif 1</td>
-                        <td class="border border-gray-300 p-2">
-                            <input type="text" value="1" readonly
-                                class="w-full text-center border rounded p-1 focus:outline-none bg-gray-200">
-                        </td>
-                        <td class="border border-gray-300 p-2">
-                            <input type="text"
-                                class="w-full text-center border rounded p-1 focus:outline-violet-500">
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="border border-gray-300 p-2 font-semibold">Alternatif 2</td>
-                        <td class="border border-gray-300 p-2">
-                            <input type="text"
-                                class="w-full text-center border rounded p-1 focus:outline-violet-500">
-                        </td>
-                        <td class="border border-gray-300 p-2">
-                            <input type="text" value="1" readonly
-                                class="w-full text-center border rounded p-1 focus:outline-none bg-gray-200">
-                        </td>
-                    </tr>
-                </tbody>                
-            </table>
+        <!-- Tabel Perbandingan Kriteria -->
+        <div class="px-4 py-4">
+            <div class="overflow-x-auto">
+                <table id="tabel-kriteria" class="min-w-full border border-gray-300 text-center"></table>
+            </div>
         </div>
 
         <!-- Tombol Submit -->
-        <div class="p-6">
-            <button id="submit"
-                class="w-full bg-rose-500 text-white py-3 rounded-2xl text-lg font-semibold hover:bg-rose-600 transition duration-200">
+        <div class="p-4">
+            <button id="submit-button"
+                class="w-full bg-rose-500 text-white py-3 rounded-2xl text-lg font-semibold hover:bg-rose-600 transition duration-200 focus:outline-none focus:ring-4 focus:ring-rose-300">
                 Submit
             </button>
         </div>
-
-        <!-- Footer Indicator -->
-        <div class="flex justify-center pb-4">
-            <div class="w-32 h-1 bg-gray-300 rounded-full"></div>
-        </div>
     </div>
 
-    <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            const submitButton = document.getElementById("submit");
-            const tableInputs = document.querySelectorAll("table input");
-    
-            // Fungsi untuk membaca nilai dari input tabel
-            function getMatrixValues() {
-                const matrix = [];
-                const rows = document.querySelectorAll("tbody tr");
-    
-                rows.forEach((row) => {
-                    const rowValues = [];
-                    const inputs = row.querySelectorAll("input");
-                    inputs.forEach((input) => {
-                        const value = parseFloat(input.value);
-                        if (isNaN(value) || value <= 0) {
-                            throw new Error("Semua nilai harus berupa angka positif lebih dari 0.");
-                        }
-                        rowValues.push(value);
-                    });
-                    matrix.push(rowValues);
-                });
-    
-                return matrix;
-            }
-    
-            // Fungsi untuk memvalidasi matriks simetris 
-            function isMatrixSymmetric(matrix) {
-                const n = matrix.length;
-    
-                for (let i = 0; i < n; i++) {
-                    for (let j = 0; j < n; j++) {
-                        if (matrix[i][j] !== 1 / matrix[j][i] && i !== j) {
-                            return false;
-                        }
-                    }
-                }
-                return true;
-            }
-    
-            // Event listener untuk tombol Submit
-            submitButton.addEventListener("click", () => {
-                try {
-                    const matrix = getMatrixValues();
-    
-                    // Validasi simetris
-                    if (!isMatrixSymmetric(matrix)) {
-                        alert("Matriks tidak simetris! Pastikan nilai input memenuhi aturan AHP.");
-                        return;
-                    }
-    
-                    console.log("Matriks Perbandingan Berpasangan:", matrix);
-                    alert("Data berhasil dikirim! Lihat konsol untuk melihat matriks.");
-    
-                    // Kirim data ke server atau lakukan proses lainnya di sini
-                    // Contoh placeholder: window.location.href = "next-page.html";
-    
-                } catch (error) {
-                    alert(error.message);
-                }
-            });
-    
-            // Fungsi untuk menjaga konsistensi input simetris secara real-time
-            tableInputs.forEach((input, index) => {
-                input.addEventListener("input", () => {
-                    const row = Math.floor(index / 2);
-                    const col = index % 2;
-    
-                    if (row !== col) {
-                        const targetInput = document.querySelectorAll("table input")[col * 2 + row];
-                        if (parseFloat(input.value) > 0) {
-                            targetInput.value = (1 / parseFloat(input.value)).toFixed(3);
-                        }
-                    }
-                });
-            });
-        });
-    </script>
-    
+    <!-- Loading Overlay -->
+    <div id="loading-spinner"
+        class="hidden fixed inset-0 flex justify-center items-center bg-gray-800 bg-opacity-50 z-50">
+        <div class="spinner-border animate-spin border-4 border-t-4 border-gray-500 rounded-full w-12 h-12"></div>
+    </div>
 
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="../js/ahp-compare-criteria.js"></script>
 </body>
 
 </html>
