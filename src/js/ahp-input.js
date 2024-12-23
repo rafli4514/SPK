@@ -1,15 +1,15 @@
-// input.js
+// ahp-input.js
 
-const API_BASE_URL = 'http://localhost:5000/api';
+const API_BASE_URL = 'http://localhost:5000/api/ahp';
 
 // Seleksi elemen HTML
 const kriteriaInput = document.getElementById('kriteria');
 const addKriteriaButton = document.getElementById('add-kriteria');
-const listKriteria = document.getElementById('list-kriteria');
+const listKriteriaTableBody = document.querySelector('#list-kriteria tbody');
 
 const alternatifInput = document.getElementById('alternatif');
 const addAlternatifButton = document.getElementById('add-alternatif');
-const listAlternatif = document.getElementById('list-alternatif');
+const listAlternatifTableBody = document.querySelector('#list-alternatif tbody');
 
 const lanjutButton = document.getElementById('lanjut');
 const backButton = document.getElementById('back-button');
@@ -59,15 +59,63 @@ function hideLoading() {
 }
 
 // Fungsi untuk Memperbarui Tampilan Daftar Kriteria
-function updateKriteriaList() {
-    const formattedCriteria = criteriaArray.map(crit => `• ${crit}`).join('\n');
-    listKriteria.value = formattedCriteria;
+function renderKriteria() {
+    listKriteriaTableBody.innerHTML = '';
+
+    criteriaArray.forEach((kriteria, index) => {
+        const row = document.createElement('tr');
+
+        // No
+        const noCell = document.createElement('td');
+        noCell.textContent = index + 1;
+        row.appendChild(noCell);
+
+        // Nama Kriteria
+        const nameCell = document.createElement('td');
+        nameCell.textContent = kriteria;
+        row.appendChild(nameCell);
+
+        // Aksi
+        const actionCell = document.createElement('td');
+        const removeButton = document.createElement('button');
+        removeButton.textContent = 'Hapus';
+        removeButton.className = 'remove-button';
+        removeButton.setAttribute('data-index', index);
+        actionCell.appendChild(removeButton);
+        row.appendChild(actionCell);
+
+        listKriteriaTableBody.appendChild(row);
+    });
 }
 
 // Fungsi untuk Memperbarui Tampilan Daftar Alternatif
-function updateAlternatifList() {
-    const formattedAlternatif = alternativesArray.map(alt => `• ${alt}`).join('\n');
-    listAlternatif.value = formattedAlternatif;
+function renderAlternatif() {
+    listAlternatifTableBody.innerHTML = '';
+
+    alternativesArray.forEach((alternatif, index) => {
+        const row = document.createElement('tr');
+
+        // No
+        const noCell = document.createElement('td');
+        noCell.textContent = index + 1;
+        row.appendChild(noCell);
+
+        // Nama Alternatif
+        const nameCell = document.createElement('td');
+        nameCell.textContent = alternatif;
+        row.appendChild(nameCell);
+
+        // Aksi
+        const actionCell = document.createElement('td');
+        const removeButton = document.createElement('button');
+        removeButton.textContent = 'Hapus';
+        removeButton.className = 'remove-button';
+        removeButton.setAttribute('data-index', index);
+        actionCell.appendChild(removeButton);
+        row.appendChild(actionCell);
+
+        listAlternatifTableBody.appendChild(row);
+    });
 }
 
 // Fungsi Menambah Kriteria
@@ -83,7 +131,7 @@ function tambahKriteria() {
     }
     if (!criteriaArray.includes(kriteriaValue)) {
         criteriaArray.push(kriteriaValue);
-        updateKriteriaList();
+        renderKriteria();
         kriteriaInput.value = '';
         showAlert('Kriteria berhasil ditambahkan.', 'success');
     } else {
@@ -104,11 +152,29 @@ function tambahAlternatif() {
     }
     if (!alternativesArray.includes(alternatifValue)) {
         alternativesArray.push(alternatifValue);
-        updateAlternatifList();
+        renderAlternatif();
         alternatifInput.value = '';
         showAlert('Alternatif berhasil ditambahkan.', 'success');
     } else {
         showAlert('Alternatif sudah ada dalam daftar.', 'error');
+    }
+}
+
+// Fungsi untuk Menghapus Kriteria atau Alternatif
+function hapusItem(event) {
+    if (event.target.classList.contains('remove-button')) {
+        const index = parseInt(event.target.getAttribute('data-index'), 10);
+        const parentTable = event.target.closest('table').id;
+
+        if (parentTable === 'list-kriteria') {
+            criteriaArray.splice(index, 1);
+            renderKriteria();
+            showAlert('Kriteria berhasil dihapus.', 'success');
+        } else if (parentTable === 'list-alternatif') {
+            alternativesArray.splice(index, 1);
+            renderAlternatif();
+            showAlert('Alternatif berhasil dihapus.', 'success');
+        }
     }
 }
 
@@ -140,13 +206,13 @@ async function sendData() {
         lanjutButton.disabled = false; // Aktifkan kembali tombol Lanjut
 
         if (response.ok) {
-            showAlert(data.message, 'success');
+            showAlert(data.message || 'Data berhasil disimpan.', 'success');
             setTimeout(() => {
-                window.location.href = 'ahp-criteria-page.html';
+                window.location.href = 'ahp-criteria-page.html'; // Ganti dengan halaman input skor
             }, 1500);
         } else {
             console.error('Error Response:', data);
-            showAlert(`Error: ${data.error}`, 'error');
+            showAlert(`Error: ${data.error || 'Terjadi kesalahan.'}`, 'error');
         }
     } catch (error) {
         hideLoading();
@@ -156,16 +222,22 @@ async function sendData() {
     }
 }
 
-// Event Listener
+// Event Listener untuk Menambah Kriteria
 if (addKriteriaButton) {
     addKriteriaButton.addEventListener('click', tambahKriteria);
 }
+
+// Event Listener untuk Menambah Alternatif
 if (addAlternatifButton) {
     addAlternatifButton.addEventListener('click', tambahAlternatif);
 }
 
+// Event Listener untuk Menghapus Kriteria atau Alternatif
+document.addEventListener('click', hapusItem);
+
+// Event Listener untuk Menangani Enter Key pada Input Kriteria
 if (kriteriaInput) {
-    kriteriaInput.addEventListener('keypress', (event) => {
+    kriteriaInput.addEventListener('keydown', (event) => {
         if (event.key === 'Enter') {
             event.preventDefault();
             tambahKriteria();
@@ -173,8 +245,9 @@ if (kriteriaInput) {
     });
 }
 
+// Event Listener untuk Menangani Enter Key pada Input Alternatif
 if (alternatifInput) {
-    alternatifInput.addEventListener('keypress', (event) => {
+    alternatifInput.addEventListener('keydown', (event) => {
         if (event.key === 'Enter') {
             event.preventDefault();
             tambahAlternatif();
@@ -182,12 +255,14 @@ if (alternatifInput) {
     });
 }
 
+// Event Listener untuk Tombol Kembali
 if (backButton) {
     backButton.addEventListener('click', () => {
         window.location.href = 'index.html';
     });
 }
 
+// Event Listener untuk Tombol Lanjut
 if (lanjutButton) {
     lanjutButton.addEventListener('click', sendData);
 }

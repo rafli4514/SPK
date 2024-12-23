@@ -1,7 +1,7 @@
 // ahp-result-page.js
 
 document.addEventListener('DOMContentLoaded', () => {
-    const baseUrl = 'http://localhost:5000/api'; 
+    const baseUrl = 'http://localhost:5000/api/ahp'; 
 
     const alertContainer = document.getElementById('alert-container');
     const loadingIndicator = document.getElementById('loading-indicator');

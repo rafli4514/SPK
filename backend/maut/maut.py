@@ -1,5 +1,5 @@
 import numpy as np
-from ..base_method import BaseMethod
+# from ..base_method import BaseMethod
 
 class MAUT:
     def __init__(self):
@@ -320,61 +320,46 @@ class MAUT:
         """
         print("\n=== Proses MAUT Dimulai ===")
 
-        # Menambahkan Kriteria Benefit
         self.add_criteria('benefit')
 
-        # Menambahkan Kriteria Cost
         self.add_criteria('cost')
 
-        # Memastikan setidaknya ada satu kriteria
         if not self.criteria_benefit and not self.criteria_cost:
             print("Tidak ada kriteria yang ditambahkan. Proses MAUT dihentikan.")
             return
 
-        # Menambahkan Bobot Benefit
         if self.criteria_benefit:
             self.add_weights('benefit')
 
-        # Menambahkan Bobot Cost
         if self.criteria_cost:
             self.add_weights('cost')
 
-        # Memastikan setidaknya ada bobot
         if not self.weight_benefit and not self.weight_cost:
             print("Tidak ada bobot yang ditambahkan. Proses MAUT dihentikan.")
             return
 
-        # Normalisasi bobot
         self.normalize_weights()
 
-        # Menambahkan Alternatif
         self.add_alternatives()
 
-        # Memastikan setidaknya ada satu alternatif
         if not self.alternatives:
             print("Tidak ada alternatif yang ditambahkan. Proses MAUT dihentikan.")
             return
 
-        # Menambahkan Matriks
         self.add_matrices()
 
-        # Memastikan setidaknya ada satu matriks
         if self.matrix_benefit is None and self.matrix_cost is None:
             print("Tidak ada matriks kriteria yang dimasukkan. Proses MAUT dihentikan.")
             return
 
-        # Hitung Skor
         self.calculate_scores()
 
-        # Memastikan skor telah dihitung
         if self.S_scores is None or self.V_scores is None:
             print("Skor tidak dapat dihitung. Proses MAUT dihentikan.")
             return
 
-        # Ranking Alternatif
         self.rank_alternatives()
 
-        # Tampilkan Hasil
         self.display()
 
         print("\n=== Proses MAUT Selesai ===")

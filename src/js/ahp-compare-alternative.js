@@ -1,7 +1,7 @@
 // ahp-compare-alternative.js
 
 document.addEventListener('DOMContentLoaded', function () {
-    const API_BASE_URL = 'http://localhost:5000/api';
+    const API_BASE_URL = 'http://localhost:5000/api/ahp';
 
     const alertContainer = document.getElementById('alert-container');
     const comparisonFormsContainer = document.getElementById('comparison-forms');
